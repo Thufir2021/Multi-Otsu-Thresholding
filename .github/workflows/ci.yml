@@ -1,35 +1,48 @@
-name: Build & Test
+name: CI
 
 on:
   push:
-    branches: [ main, master ]
   pull_request:
-    branches: [ main, master ]
 
 jobs:
-  build-and-test:
-    name: ${{ matrix.os }} / ${{ matrix.build_type }}
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      fail-fast: false
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        build_type: [Release, Debug]
+  build-and-run:
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    - name: Checkout
+      uses: actions/checkout@v4
 
-      - name: Configure
-        run: >
-          cmake -B build
-          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
-          -DBUILD_DEMO=ON
-          -DBUILD_TESTS=ON
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libtiff-dev cmake
 
-      - name: Build
-        run: cmake --build build --config ${{ matrix.build_type }} --parallel
+    - name: Configure
+      run: cmake -B build
 
-      - name: Test
-        run: ctest --test-dir build --build-config ${{ matrix.build_type }} --output-on-failure
+    - name: Build
+      run: cmake --build build --parallel
+
+    - name: Run segmentation
+      run: |
+        set -e
+        mkdir -p examples/output
+
+        shopt -s nullglob
+        files=(examples/input/*.tif)
+
+        if [ ${#files[@]} -eq 0 ]; then
+          echo "No input TIFFs found in examples/input/"
+          exit 1
+        fi
+
+        for f in "${files[@]}"; do
+          echo "Processing $f"
+          ./build/multi_otsu_cli "$f" "examples/output/$(basename "$f")"
+        done
+
+    - name: Upload results
+      uses: actions/upload-artifact@v4
+      with:
+        name: segmented-images
+        path: examples/output/
