@@ -1,6 +1,6 @@
-# multi-otsu
+# Multi-Otsu Thresholding
 
-> **Header-only, dependency-free 3-class Otsu thresholding — C++17, pure STL**
+> **An algorithm that segments an image based on its gray-level intensities**
 
 A single header (`include/multi_otsu.hpp`) that finds two intensity thresholds `t1 < t2`
 maximising the between-class variance of an 8-bit grayscale image.
