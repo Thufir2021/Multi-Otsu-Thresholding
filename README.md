@@ -2,9 +2,8 @@
 
 > **An algorithm that segments an image based on its gray-level intensities**
 
-A single header (`include/multi_otsu.hpp`) that finds two intensity thresholds `t1 < t2`
-maximising the between-class variance of an 8-bit grayscale image.
-No OpenCV, no Boost, no external libraries of any kind.
+input: 8-, 16-, 24-bit image
+output: 8-bit image segmented into three classes with two thresholds (t1 and t2)
 
 ---
 
