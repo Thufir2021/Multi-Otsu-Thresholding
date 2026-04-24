@@ -1,0 +1,15 @@
+build/
+cmake-build-*/
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+*.cmake
+!CMakeLists.txt
+*.o
+*.a
+multi_otsu_demo
+test_multi_otsu
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
