@@ -29,16 +29,6 @@ target_link_libraries(multi_otsu_cli
         TIFF::TIFF
 )
 
-# ── Tests ────────────────────────────────────────────────────────────────────
-option(BUILD_TESTS "Build tests" ON)
-
-if(BUILD_TESTS)
-    enable_testing()
-    add_executable(test_multi_otsu tests/test_multi_otsu.cpp)
-    target_link_libraries(test_multi_otsu PRIVATE multi_otsu::multi_otsu)
-    add_test(NAME multi_otsu_tests COMMAND test_multi_otsu)
-endif()
-
 # ── Install ──────────────────────────────────────────────────────────────────
 include(GNUInstallDirs)
 

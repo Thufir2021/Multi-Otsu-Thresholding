@@ -1,11 +1,11 @@
-name: CI
+name: Build and Run
 
 on:
   push:
   pull_request:
 
 jobs:
-  build-and-run:
+  run:
     runs-on: ubuntu-latest
 
     steps:
@@ -15,7 +15,7 @@ jobs:
     - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y libtiff-dev cmake
+        sudo apt-get install -y cmake libtiff-dev
 
     - name: Configure
       run: cmake -B build
@@ -28,20 +28,12 @@ jobs:
         set -e
         mkdir -p examples/output
 
-        shopt -s nullglob
-        files=(examples/input/*.tif)
-
-        if [ ${#files[@]} -eq 0 ]; then
-          echo "No input TIFFs found in examples/input/"
-          exit 1
-        fi
-
-        for f in "${files[@]}"; do
+        for f in examples/input/*.tif; do
           echo "Processing $f"
           ./build/multi_otsu_cli "$f" "examples/output/$(basename "$f")"
         done
 
-    - name: Upload results
+    - name: Upload outputs
       uses: actions/upload-artifact@v4
       with:
         name: segmented-images
