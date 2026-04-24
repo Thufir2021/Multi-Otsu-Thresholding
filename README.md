@@ -111,6 +111,9 @@ multi-otsu/
 └── README.md
 ```
 ---
+## Credits
+
+Data courtesy of Prof. Dr. Klaus Sokolowski-Tinten (University of Duisburg-Essen).
 
 ## License
 
